@@ -6,8 +6,9 @@ from basic_info import SaveLoadPickle
 
 def get_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--price', required=False, help="功能描述")
-    parser.add_argument('-b', '--bei', required=False, action='store_true', help="功能描述")
+    parser.add_argument('-p', '--price', required=False, help="当前行情")
+    parser.add_argument('-b', '--north', required=False, action='store_true', help="北上资金")
+    parser.add_argument('-d', '--index', required=False, action='store_true', help="上证指数")
     return parser
 
 
@@ -55,9 +56,12 @@ def is_chinese(word):
 
 
 def resolve_current_price(param):
+    """
+    对参数-p的解析，显示现价行情
+    """
     if len(param) >= 2:
         select = alternative_list(param)
-        menu = tty_menu.tty_menu(select, title='列表?')
+        menu = tty_menu.tty_menu(select, title='请选择?')
         selected = select[menu]
         code = selected.split('\t')[0]
         name = selected.split('\t')[1]

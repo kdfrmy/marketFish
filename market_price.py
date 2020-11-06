@@ -1,5 +1,7 @@
 # coding=UTF-8
 import args
+import remote_data
+
 
 if __name__ == "__main__":
 
@@ -8,8 +10,8 @@ if __name__ == "__main__":
     if known_args.price is not None:
         resolved_p = args.resolve_param_p(known_args.price)
         args.resolve_current_price(resolved_p)
-    elif known_args.bei:
-        print(known_args.bei)
+    elif known_args.north:
+        remote_data.print_north_capital()
     # 其他选项在此添加
     else:
-        print("call index")
+        remote_data.get_sh000001()
