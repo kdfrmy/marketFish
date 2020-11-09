@@ -1,5 +1,5 @@
 import urllib.request
-from tick import Tick
+from model.tick import Tick
 import json
 from model.capital_channel import CapitalChannel
 from model.capital_channel import NorthCapitalChannel
@@ -62,48 +62,5 @@ def get_sh000001():
     request.add_header("user-agent",
                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                        "Chrome/86.0.4240.111 Safari/537.36")
-    response = str(urllib.request.urlopen(request).read())
-    print(response)
+    return str(urllib.request.urlopen(request).read())
     # 今开 昨收 当前 最高 最低成交量手 成交额元  按规则解析
-
-
-def print_north_capital():
-    property_end = "\033[0m"
-    north_capital = get_north()
-    print("净流入\t沪股通\t深股通")
-    net = north_capital.sh_channel.net_in + north_capital.sz_channel.net_in
-    color_net = get_color(net)
-    color_sh = get_color(north_capital.sh_channel.net_in)
-    color_sz = get_color(north_capital.sz_channel.net_in)
-    print(color_net + str(round(net/10000, 2)) + '亿' + '\t' + property_end
-          + color_sh + str(round(north_capital.sh_channel.net_in/10000, 2))+'亿'+'\t'+property_end
-          + color_sz + str(round(north_capital.sz_channel.net_in/10000, 2))+'亿'+'\t'+property_end)
-
-
-def get_color(number):
-    return "\033[31m" if number >= 0 else "\033[32m"
-
-
-def print_tick(code, name):
-    """
-    打印现价行情
-    """
-    response = get_current_price(code)
-    tick = resolve_json(response)
-    print("code\tname\trise\tcurrent\topen\thigh\tlow")
-    if tick.rising_rate_i >= 0:
-        # \033[1m 加粗
-        # \033[31m 字体颜色红  \033[32m 字体颜色绿
-        # \033[0m 结束属性设置
-        # code name 无色
-        print(
-            "\033[1m" + code + "\t" + name + "\t" + "\033[31m" + tick.rising_rate + "\t" + tick.close + "\t" + tick.open + "\t" + tick.high
-            + "\t" + tick.low + "\033[0m")
-    else:
-        print(
-            "\033[1m" + code + "\t" + name + "\t" + "\033[32m" + tick.rising_rate + "\t" + tick.close + "\t" + tick.open + "\t" + tick.high
-            + "\t" + tick.low + "\033[0m")
-
-
-if __name__ == '__main__':
-    print_north_capital()

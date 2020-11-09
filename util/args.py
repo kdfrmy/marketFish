@@ -1,7 +1,6 @@
 import argparse
-import remote_data
-import tty_menu
-from basic_info import SaveLoadPickle
+from util import remote_data, tty_menu
+from util.basic_info import SaveLoadPickle
 
 
 def get_parser():

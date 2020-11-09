@@ -1,7 +1,5 @@
 # coding=UTF-8
-import args
-import remote_data
-
+from util import args, remote_data
 
 if __name__ == "__main__":
 
@@ -14,4 +12,4 @@ if __name__ == "__main__":
         remote_data.print_north_capital()
     # 其他选项在此添加
     else:
-        remote_data.get_sh000001()
+        res = remote_data.get_sh000001()
