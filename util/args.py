@@ -1,5 +1,7 @@
 import argparse
-from util import remote_data, tty_menu
+
+from util import paint
+from util import tty_menu
 from util.basic_info import SaveLoadPickle
 
 
@@ -64,8 +66,8 @@ def resolve_current_price(param):
         selected = select[menu]
         code = selected.split('\t')[0]
         name = selected.split('\t')[1]
-        remote_data.print_tick(code, name)
+        paint.print_tick(code, name)
     elif len(param) == 1:
         code = param['symbol'].iloc[0]
         name = param['name'].iloc[0]
-        remote_data.print_tick(code, name)
+        paint.print_tick(code, name)
