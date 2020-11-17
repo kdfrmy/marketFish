@@ -8,7 +8,7 @@ import pathlib
 from config import config
 
 
-class SaveLoadPickle:
+class TushareFish:
     def __init__(self):
         ts.set_token(config.get_config("token", "tushare-token"))
         pro = ts.pro_api()
@@ -39,6 +39,22 @@ class SaveLoadPickle:
             loaded_data = pickle.load(info_file)
             return loaded_data
 
+    def main_business(self, code):
+        """
+        获取主营业务
+        code形如600123.SH
+        """
+        df = self.pro.fina_mainbz(ts_code=code, type='P', fields='ts_code, end_date, bz_item, bz_sales')
+        end_date = df.iloc[0]['end_date']
+        period_sales = df[df['end_date'] == end_date].sort_values(by='bz_sales', ascending=False)
+        total_sales = period_sales['bz_sales'].sum()
+        period_sales['sales_percent'] = period_sales['bz_sales'].map(
+            lambda x: str(round(x * 100 / total_sales, 2)) + '%')
+        period_sales.drop(['end_date', 'bz_sales', 'ts_code'], axis=1, inplace=True)
+        period_sales.rename(columns={'bz_item': '业务板块', 'sales_percent': '营收占比'}, inplace=True)
+        period_sales.reset_index(drop=True, inplace=True)
+        return period_sales
+
     @staticmethod
     def solve_pinyin(name):
         """
@@ -51,7 +67,7 @@ class SaveLoadPickle:
 
 
 if __name__ == "__main__":
-    basic = SaveLoadPickle()
+    basic = TushareFish()
     # data = basic.load_basic_info_pickle()
     basic.save_basic_info_pickle()
     # print(data.head())

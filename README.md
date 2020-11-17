@@ -13,6 +13,6 @@ market_price.py [-h] [-p PRICE] [-b] [-d] <br>
 
 optional arguments:<br>
   -h, --help            show this help message and exit<br>
-  -p PRICE, --price PRICE    当前行情<br>
+  -p PRICE, --price PRICE    当前行情,参数支持中文全名、数字、拼音首字母<br>
   -b, --north           北上资金<br>
   -d, --index           上证指数<br>
