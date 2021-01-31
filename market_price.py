@@ -14,6 +14,8 @@ if __name__ == "__main__":
     elif known_args.main is not None:
         main_business = args.resolve_main_business_param(known_args.main)
         print(main_business)
+    elif known_args.south is not None:
+        paint.print_south_capital()
     # 其他选项在此添加
     else:
         paint.print_index_sh()

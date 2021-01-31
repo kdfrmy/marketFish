@@ -1,7 +1,7 @@
 """
 画图以及打印
 """
-from util.remote_data import get_current_price, resolve_json, get_north, get_sh000001
+from util.remote_data import get_current_price, resolve_json, get_north, get_sh000001,get_south
 
 BOLD = "\033[1m"  # 加粗
 PROPERTY_END = "\033[0m"  # 属性设置结束
@@ -16,12 +16,29 @@ def print_north_capital():
     north_capital = get_north()
     print("净流入\t沪股通\t深股通")
     net = north_capital.sh_channel.net_in + north_capital.sz_channel.net_in
+    paint_capital(net, north_capital)
+
+
+def print_south_capital():
+    """
+    打印北上资金情况
+    """
+    south_capital = get_south()
+    print("净流入\t港股通-上海\t港股通-深圳")
+    net = south_capital.sh_channel.net_in + south_capital.sz_channel.net_in
+    paint_capital(net, south_capital)
+
+
+def paint_capital(net, south_capital):
+    """
+    打印资金，北上和南下
+    """
     color_net = get_color(net)
-    color_sh = get_color(north_capital.sh_channel.net_in)
-    color_sz = get_color(north_capital.sz_channel.net_in)
+    color_sh = get_color(south_capital.sh_channel.net_in)
+    color_sz = get_color(south_capital.sz_channel.net_in)
     print(color_net + str(round(net / 10000, 2)) + '亿' + '\t' + PROPERTY_END
-          + color_sh + str(round(north_capital.sh_channel.net_in / 10000, 2)) + '亿' + '\t' + PROPERTY_END
-          + color_sz + str(round(north_capital.sz_channel.net_in / 10000, 2)) + '亿' + '\t' + PROPERTY_END)
+          + color_sh + str(round(south_capital.sh_channel.net_in / 10000, 2)) + '亿' + '\t' + PROPERTY_END
+          + color_sz + str(round(south_capital.sz_channel.net_in / 10000, 2)) + '亿' + '\t' + PROPERTY_END)
 
 
 def get_color(number):

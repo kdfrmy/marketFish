@@ -42,5 +42,5 @@ class SouthCapitalChannel:
     """
 
     def __init__(self, sh2hk_channel, sz2hk_channel):
-        self.hz_channel = sh2hk_channel
+        self.sh_channel = sh2hk_channel
         self.sz_channel = sz2hk_channel
