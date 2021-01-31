@@ -3,6 +3,7 @@ from model.tick import Tick
 import json
 from model.capital_channel import CapitalChannel
 from model.capital_channel import NorthCapitalChannel
+from model.capital_channel import SouthCapitalChannel
 
 
 def get_current_price(code):
@@ -35,14 +36,7 @@ def get_north():
     """
     获取北上资金信息
     """
-    url = "http://push2.eastmoney.com/api/qt/kamt/get?fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f63"
-    request = urllib.request.Request(url)
-    request.add_header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, "
-                                     "like Gecko) Chrome/86.0.4240.111 Safari/537.36")
-    request.add_header("host", "push2.eastmoney.com")
-    request.add_header("Referer", "http://data.eastmoney.com/")
-    response = urllib.request.urlopen(request).read()
-    channel_data = json.loads(response)['data']
+    channel_data = mainland_hk_cash_flow()
     hk2sh = CapitalChannel(net_buy=channel_data['hk2sh']['netBuyAmt'],
                            net_in=channel_data['hk2sh']['dayNetAmtIn'],
                            remain=channel_data['hk2sh']['dayAmtRemain'],
@@ -52,6 +46,38 @@ def get_north():
                            remain=channel_data['hk2sz']['dayAmtRemain'],
                            threshold=channel_data['hk2sz']['dayAmtThreshold'])
     return NorthCapitalChannel(hk2sh_channel=hk2sh, hk2sz_channel=hk2sz)
+
+
+def get_south():
+    """
+    获取南向资金
+    """
+    channel_data = mainland_hk_cash_flow()
+    sh2hk = CapitalChannel(net_buy=channel_data['sh2hk']['netBuyAmt'],
+                           net_in=channel_data['sh2hk']['dayNetAmtIn'],
+                           remain=channel_data['sh2hk']['dayAmtRemain'],
+                           threshold=channel_data['sh2hk']['dayAmtThreshold'])
+    sz2hk = CapitalChannel(net_buy=channel_data['sz2hk']['netBuyAmt'],
+                           net_in=channel_data['sz2hk']['dayNetAmtIn'],
+                           remain=channel_data['sz2hk']['dayAmtRemain'],
+                           threshold=channel_data['sz2hk']['dayAmtThreshold'])
+    return SouthCapitalChannel(sh2hk_channel=sh2hk, sz2hk_channel=sz2hk)
+
+
+def mainland_hk_cash_flow():
+    """
+    获取北向和南向资金
+    """
+
+    url = "http://push2.eastmoney.com/api/qt/kamt/get?fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f63"
+    request = urllib.request.Request(url)
+    request.add_header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, "
+                                     "like Gecko) Chrome/86.0.4240.111 Safari/537.36")
+    request.add_header("host", "push2.eastmoney.com")
+    request.add_header("Referer", "http://data.eastmoney.com/")
+    response = urllib.request.urlopen(request).read()
+    channel_data = json.loads(response)['data']
+    return channel_data
 
 
 def get_sh000001():
