@@ -8,8 +8,8 @@ from util.basic_info import TushareFish
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--price', required=False, help="当前行情")
-    parser.add_argument('-b', '--north', required=False, action='store_true', help="北上资金")  # 不带参数值
-    parser.add_argument('-n', '--south', required=False, action='store_true', help="南下资金")  # 不带参数值
+    parser.add_argument('-n', '--north', required=False, action='store_true', help="北上资金")  # 不带参数值
+    parser.add_argument('-s', '--south', required=False, action='store_true', help="南下资金")  # 不带参数值
     parser.add_argument('-d', '--index', required=False, action='store_true', help="上证指数")  # 不带参数值
     parser.add_argument('-m', '--main', required=False, help="主营业务")
     return parser
